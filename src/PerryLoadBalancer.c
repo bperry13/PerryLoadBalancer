@@ -4,15 +4,17 @@
  * @author: Brett Perry
  * @version: 2.14.22
  */
+#include <stdlib.h>
 #include "../hdr/LoadBalancer.h"
-
 
 /**
  * Initializes the load balancer. Takes batch size as parameter.
  */
 balancer* balancer_create(int batch_size) {
-    //TODO:
-
+    balancer* list = malloc(sizeof(struct balancer));
+    list->size = batch_size;
+    list = NULL;
+    return list;
 }
 
 /**
@@ -20,8 +22,7 @@ balancer* balancer_create(int batch_size) {
  * completed.
  */
 void balancer_destroy(balancer** lb) {
-    //TODO:
-
+        free(lb);
 }
 
 /**
@@ -34,6 +35,15 @@ void balancer_destroy(balancer** lb) {
  * @param data_return a pointer to a location to store the result of processing.
  */
 void balancer_add_job(balancer* lb, int user_id, int data, int* data_return) {
-    //TODO:
 
+    job_node* new_node = malloc(sizeof(struct job_node));
+    new_node->user_id = user_id;
+    new_node->data = data;
+    new_node->data_result = data_return;
+
+    //add node to the front
+    //point new node to next in job list
+    lb->job_list->next = lb->job_list;
+    //assign new node to front of job list
+    lb->job_list = new_node;
 }
