@@ -12,7 +12,9 @@
 #include "LoadBalancer.h"
 
 //struct for representing the host
-typedef struct host host;
+typedef struct host {
+    int host_id;
+} host;
 
 struct job_node; //defined in LoadBalancer
 
