@@ -11,9 +11,8 @@
  * Initializes the load balancer. Takes batch size as parameter.
  */
 balancer* balancer_create(int batch_size) {
-    balancer* list = malloc(sizeof(struct balancer));
+    balancer *list = malloc(sizeof(struct balancer));
     list->size = batch_size;
-    list = NULL;
     return list;
 }
 
@@ -22,7 +21,7 @@ balancer* balancer_create(int batch_size) {
  * completed.
  */
 void balancer_destroy(balancer** lb) {
-        free(lb);
+    free(lb);
 }
 
 /**

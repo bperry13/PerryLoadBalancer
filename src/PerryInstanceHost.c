@@ -7,20 +7,24 @@
  * @version: 2.14.22
  */
 #include "../hdr/InstanceHost.h"
+#include <stdlib.h>
+#include <stdio.h>
 
 /**
 * Initializes the host environment.
 */
 host* host_create() {
-
+    host *h = malloc(sizeof(host));
+    h = NULL;
+    return h;
 }
 
 /**
 * Shuts down the host environment. Ensures any outstanding batches have
 * completed.
 */
-void host_destroy(host**) {
-
+void host_destroy(host** h) {
+    free(h);
 }
 
 /**
@@ -32,5 +36,9 @@ void host_destroy(host**) {
 * @param job_batch_list A list containing the jobs in a batch to process.
 */
 void host_request_instance(host* h, struct job_node* batch) {
+    //batch = list of jobs
+    //h = host
+
+
 
 }
