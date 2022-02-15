@@ -3,6 +3,8 @@
  * simply called host_request_instance() from InstanceHost.c. It will not make
  * any sort of network connection.
  *
+ * Completion time: 8 hours
+ *
  * @author: Brett Perry
  * @version: 2.14.22
  */
@@ -41,8 +43,6 @@ void host_destroy(host** h) {
 * @param job_batch_list A list containing the jobs in a batch to process.
 */
 void host_request_instance(host* h, struct job_node* batch) {
-
-    printf ("LoadBalancer : Received batch and spinning up new instance .\n");
 
     //while batch not equal to null
     while (batch != NULL) {
