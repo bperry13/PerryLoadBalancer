@@ -4,8 +4,16 @@
  * @author: Brett Perry
  * @version: 2.14.22
  */
+#include <stdio.h>
 #include <stdlib.h>
 #include "../hdr/LoadBalancer.h"
+#include <pthread.h>
+
+typedef struct balancer {
+    int size;
+    int requests;
+    struct job_node* head;
+} balancer;
 
 /**
  * Initializes the load balancer. Takes batch size as parameter.
@@ -13,6 +21,8 @@
 balancer* balancer_create(int batch_size) {
     balancer *list = malloc(sizeof(struct balancer));
     list->size = batch_size;
+    list->requests = 0;
+    list->head = NULL;
     return list;
 }
 
@@ -21,7 +31,11 @@ balancer* balancer_create(int batch_size) {
  * completed.
  */
 void balancer_destroy(balancer** lb) {
-    free(lb);
+    host *host = host_create();
+    balancer *b = *lb;
+    if (b->head != NULL)
+        host_request_instance(host, b->head);
+    free(*lb);
 }
 
 /**
@@ -35,14 +49,25 @@ void balancer_destroy(balancer** lb) {
  */
 void balancer_add_job(balancer* lb, int user_id, int data, int* data_return) {
 
-    job_node* new_node = malloc(sizeof(struct job_node));
+    printf("LoadBalancer: Received new job from user #%d to process data=%d and store it at %p.\n", user_id, data, data_return);
+    job_node *new_node = malloc(sizeof(struct job_node));
     new_node->user_id = user_id;
     new_node->data = data;
     new_node->data_result = data_return;
 
     //add node to the front
     //point new node to next in job list
-    lb->job_list->next = lb->job_list;
+    pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
+    pthread_mutex_lock(&lock);
+    lb->requests++;
+    new_node->next = lb->head;
     //assign new node to front of job list
-    lb->job_list = new_node;
+    lb->head = new_node;
+    pthread_mutex_unlock(&lock);
+    if (lb->requests == lb->size) {
+        lb->requests = 0;
+        host *host = host_create();
+        host_request_instance(host, lb->head);
+    }
+    pthread_mutex_destroy(&lock);
 }
