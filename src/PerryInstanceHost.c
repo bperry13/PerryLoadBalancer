@@ -10,6 +10,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+typedef struct host {
+    int num;
+} host;
+
 /**
 * Initializes the host environment.
 */
@@ -24,7 +28,8 @@ host* host_create() {
 * completed.
 */
 void host_destroy(host** h) {
-    free(h);
+    free(*h);
+    h = NULL;
 }
 
 /**
@@ -36,9 +41,13 @@ void host_destroy(host** h) {
 * @param job_batch_list A list containing the jobs in a batch to process.
 */
 void host_request_instance(host* h, struct job_node* batch) {
-    //batch = list of jobs
-    //h = host
 
+    printf ("LoadBalancer : Received batch and spinning up new instance .\n");
 
-
+    //while batch not equal to null
+    while (batch != NULL) {
+        int *result = batch->data_result;
+        *result = batch->data * batch->data;
+        batch = batch->next;
+    }
 }

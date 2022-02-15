@@ -31,9 +31,9 @@ int main() {
 	int number_of_requests = 10;
     int batch_size = 5;
 	printf("Please input number of requests (users): ");
-	//scanf("%d", &number_of_requests);
+	scanf("%d", &number_of_requests);
 	printf("Please input batch size: ");
-	//scanf("%d", &batch_size);
+	scanf("%d", &batch_size);
 
 	pthread_t threads[number_of_requests];
 
